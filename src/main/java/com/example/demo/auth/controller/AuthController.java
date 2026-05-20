@@ -4,7 +4,13 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.auth.dto.LoginRequest;
 import com.example.demo.auth.dto.LoginResponse;
@@ -17,13 +23,16 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Tag(name = "Auth", description = "Đăng nhập / Đăng xuất hệ thống")
 public class AuthController {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthController(UserRepository userRepository) {
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
@@ -57,9 +66,8 @@ public class AuthController {
                         .body(new LoginResponse("Tài khoản đã bị vô hiệu hóa"));
             }
 
-            // So sánh mật khẩu (plain text)
-            String storedPwd = user.getPassword() == null ? "" : user.getPassword().trim();
-            if (!request.getPassword().equals(storedPwd)) {
+            // So sánh mật khẩu với BCrypt
+            if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 return ResponseEntity.status(401)
                         .body(new LoginResponse("Tên đăng nhập hoặc mật khẩu không đúng"));
             }
