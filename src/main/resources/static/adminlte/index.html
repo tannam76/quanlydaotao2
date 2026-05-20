@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded',function(){
     OverlayScrollbarsGlobal.OverlayScrollbars(sw,{scrollbars:{theme:'os-theme-light',autoHide:'leave',clickScroll:true}});
 });
 
-const BASE='http://localhost:8080/api';
+const BASE='/api';
 
 async function safe(url){
   try{const r=await fetch(url);const d=await r.json();return Array.isArray(d)?d:(d.content||d.data||[]);}
@@ -354,7 +354,7 @@ loadDashboard();
   const raw = sessionStorage.getItem('currentUser');
   if (!raw) {
     // Kiểm tra server session
-    fetch('http://localhost:8080/api/auth/me', { credentials: 'include' })
+    fetch('/api/auth/me', { credentials: 'include' })
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(d => {
         if (!d.success) window.location.href = '/login.html';
@@ -386,7 +386,7 @@ function renderUserInfo(user) {
 async function doLogout(e) {
   e.preventDefault();
   try {
-    await fetch('http://localhost:8080/api/auth/logout', {
+    await fetch('/api/auth/logout', {
       method: 'POST',
       credentials: 'include'
     });

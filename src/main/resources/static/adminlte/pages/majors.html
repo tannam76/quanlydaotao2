@@ -46,7 +46,7 @@
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded',function(){const sw=document.querySelector('.sidebar-wrapper');if(sw&&OverlayScrollbarsGlobal?.OverlayScrollbars)OverlayScrollbarsGlobal.OverlayScrollbars(sw,{scrollbars:{theme:'os-theme-light',autoHide:'leave',clickScroll:true}});});
-const API='http://localhost:8080/api/majors';let dt;
+const API='/api/majors';let dt;
 function showToast(m,t='success'){const el=document.getElementById('toast');el.className=`toast align-items-center text-white border-0 bg-${t}`;document.getElementById('toastMsg').textContent=m;new bootstrap.Toast(el,{delay:3000}).show();}
 $(document).ready(function(){dt=$('#majorTable').DataTable({language:{url:'https://cdn.datatables.net/plug-ins/1.13.6/i18n/vi.json'},columns:[{data:null,render:(d,t,r,m)=>m.row+1,orderable:false},{data:'code',defaultContent:'—'},{data:'name',defaultContent:'—'},{data:'description',defaultContent:'—'},{data:'isActive',render:v=>v?'<span class="badge text-bg-success">Hoạt động</span>':'<span class="badge text-bg-secondary">Ngừng</span>'},{data:null,orderable:false,className:'text-center',render:(d,t,row)=>`<button class="action-btn text-warning" onclick='editMajor(${JSON.stringify(row)})'><i class="bi bi-pencil-fill"></i></button><button class="action-btn text-danger" onclick="deleteMajor('${row.id}')"><i class="bi bi-trash-fill"></i></button>`}]});loadMajors();});
 async function loadMajors(){try{const r=await fetch(API);dt.clear().rows.add(await r.json()).draw();}catch(e){showToast('Lỗi tải!','danger');}}

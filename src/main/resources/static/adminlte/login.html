@@ -488,7 +488,9 @@
   </div>
 
   <script>
-    const API_BASE = 'http://localhost:8080/api/auth';
+    // Render sẽ chạy app backend cùng domain, nên gọi theo relative path.
+    // Tránh hardcode localhost:8080.
+    const API_BASE = '/api/auth';
 
     // ===== Toggle Password =====
     document.getElementById('togglePwd').addEventListener('click', function () {

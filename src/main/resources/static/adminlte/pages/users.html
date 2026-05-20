@@ -94,8 +94,8 @@
 <script>
 document.addEventListener('DOMContentLoaded',function(){const sw=document.querySelector('.sidebar-wrapper');if(sw&&OverlayScrollbarsGlobal?.OverlayScrollbars)OverlayScrollbarsGlobal.OverlayScrollbars(sw,{scrollbars:{theme:'os-theme-light',autoHide:'leave',clickScroll:true}});});
 
-const API='http://localhost:8080/api/users';
-const ROLE_API='http://localhost:8080/api/roles';
+const API='/api/users';
+const ROLE_API='/api/roles';
 let dt, allRoles=[], currentUserId=null, currentUserRoles=new Set();
 
 function showToast(m,t='success'){const el=document.getElementById('toast');el.className=`toast align-items-center text-white border-0 bg-${t}`;document.getElementById('toastMsg').textContent=m;new bootstrap.Toast(el,{delay:3000}).show();}
@@ -242,7 +242,7 @@ async function saveRoleAssign(){
 (function initAuth(){
   const raw=sessionStorage.getItem('currentUser');
   if(!raw){
-    fetch('http://localhost:8080/api/auth/me',{credentials:'include'})
+fetch('/api/auth/me',{credentials:'include'})
       .then(r=>r.ok?r.json():Promise.reject())
       .then(d=>{if(!d.success)window.location.href='/login.html';else renderUserInfo({username:d.username,role:d.role});})
       .catch(()=>{window.location.href='/login.html';});
@@ -259,7 +259,7 @@ function renderUserInfo(u){
 }
 async function doLogout(e){
   e.preventDefault();
-  try{await fetch('http://localhost:8080/api/auth/logout',{method:'POST',credentials:'include'});}catch(_){}
+await fetch('/api/auth/logout',{method:'POST',credentials:'include'})
   sessionStorage.removeItem('currentUser');
   window.location.href='/login.html';
 }
