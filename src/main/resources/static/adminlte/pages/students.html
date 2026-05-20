@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>Quản lý Đào tạo | Sinh viên</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../css/adminlte.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+  <style>
+    .brand-text { font-weight: 700 !important; }
+    .page-header { background: linear-gradient(135deg,#0d6efd 0%,#0a58ca 100%); color:#fff; border-radius:.75rem; padding:1.25rem 1.5rem; margin-bottom:1.5rem; }
+    .page-header h4 { margin:0; font-weight:700; }
+    .badge-status-active { background:#d1fae5; color:#065f46; }
+    .badge-status-inactive { background:#fee2e2; color:#991b1b; }
+    .action-btn { border:none; background:none; cursor:pointer; padding:.25rem .4rem; border-radius:.4rem; transition:background .15s; }
+    .action-btn:hover { background:#f1f5f9; }
+    .table thead th { background:#f8fafc; font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:#64748b; border-bottom:2px solid #e2e8f0; }
+    .dataTables_wrapper .dataTables_filter input { border-radius:.5rem; border:1px solid #cbd5e1; padding:.3rem .75rem; }
+    .modal-header { background:linear-gradient(135deg,#0d6efd,#0a58ca); color:#fff; border-radius:.75rem .75rem 0 0; }
+    .modal-header .btn-close { filter:invert(1); }
+  </style>
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<div class="app-wrapper">
+  <!-- Header -->
+  <nav class="app-header navbar navbar-expand bg-body">
+    <div class="container-fluid">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+        <li class="nav-item d-none d-md-block"><a href="../index.html" class="nav-link"><i class="bi bi-house-fill me-1"></i>Trang chủ</a></li>
+        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link text-muted">Sinh viên</a></li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#" data-lte-toggle="fullscreen"><i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i><i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display:none"></i></a></li>
+        <li class="nav-item dropdown user-menu">
+          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <img src="../assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User" />
+            <span class="d-none d-md-inline">Admin</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+            <li class="user-header text-bg-primary"><img src="../assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User" /><p>Admin<small>Quản trị viên</small></p></li>
+            <li class="user-footer"><a href="#" class="btn btn-default btn-flat float-end">Đăng xuất</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- Sidebar -->
+  <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <div class="sidebar-brand">
+      <a href="../index.html" class="brand-link">
+        <img src="../assets/img/AdminLTELogo.png" alt="Logo" class="brand-image opacity-75 shadow" />
+        <span class="brand-text fw-bold">Quản lý Đào tạo</span>
+      </a>
+    </div>
+    <div class="sidebar-wrapper">
+      <nav class="mt-2">
+        <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false" id="sidebar-nav" data-base="../" data-active="students"></ul>
+      </nav>
+    </div>
+  </aside>
+  <!-- Main -->
+  <main class="app-main">
+    <div class="app-content-header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6"><h3 class="mb-0"><i class="bi bi-people-fill me-2 text-primary"></i>Quản lý Sinh viên</h3></div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-end">
+              <li class="breadcrumb-item"><a href="../index.html">Trang chủ</a></li>
+              <li class="breadcrumb-item active">Sinh viên</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="app-content">
+      <div class="container-fluid">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h4><i class="bi bi-people-fill me-2"></i>Danh sách Sinh viên</h4>
+              <small class="opacity-75">Quản lý thông tin sinh viên trong hệ thống</small>
+            </div>
+            <button class="btn btn-light fw-semibold" onclick="openAddModal()">
+              <i class="bi bi-plus-circle-fill me-1"></i> Thêm sinh viên
+            </button>
+          </div>
+        </div>
+        <!-- Table Card -->
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table id="studentTable" class="table table-hover align-middle" style="width:100%">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Mã SV</th>
+                    <th>Họ tên</th>
+                    <th>Giới tính</th>
+                    <th>Ngày sinh</th>
+                    <th>Địa chỉ</th>
+                    <th>Trạng thái</th>
+                    <th class="text-center">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="app-footer">
+    <div class="float-end d-none d-sm-inline">Hệ thống Quản lý Đào tạo v1.0</div>
+    <strong>Copyright &copy; 2025 Quản lý Đào tạo.</strong> All rights reserved.
+  </footer>
+</div>
+
+<!-- Modal Thêm/Sửa -->
+<div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="modalTitle">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle"><i class="bi bi-person-fill me-2"></i>Thêm sinh viên</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="studentId" />
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Mã sinh viên <span class="text-danger">*</span></label>
+            <input type="text" id="code" class="form-control" placeholder="VD: SV001" />
+          </div>
+          <div class="col-md-8">
+            <label class="form-label fw-semibold">Họ và tên <span class="text-danger">*</span></label>
+            <input type="text" id="fullname" class="form-control" placeholder="Nhập họ và tên" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Giới tính</label>
+            <select id="gender" class="form-select">
+              <option value="">-- Chọn --</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Ngày sinh</label>
+            <input type="date" id="date_of_birth" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Trạng thái</label>
+            <select id="status" class="form-select">
+              <option value="Đang học">Đang học</option>
+              <option value="Bảo lưu">Bảo lưu</option>
+              <option value="Tốt nghiệp">Tốt nghiệp</option>
+              <option value="Thôi học">Thôi học</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold">Địa chỉ</label>
+            <input type="text" id="address" class="form-control" placeholder="Địa chỉ thường trú" />
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold">Địa chỉ hiện tại</label>
+            <input type="text" id="current_address" class="form-control" placeholder="Địa chỉ hiện đang ở" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">CCCD / CMND</label>
+            <input type="text" id="personal_identification_number" class="form-control" placeholder="Số CCCD" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Hủy</button>
+        <button type="button" class="btn btn-primary" onclick="saveStudent()"><i class="bi bi-save-fill me-1"></i>Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index:9999">
+  <div id="toast" class="toast align-items-center text-white border-0" role="alert">
+    <div class="d-flex"><div class="toast-body" id="toastMsg"></div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="../js/adminlte.js"></script>
+<script src="../js/sidebar.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const sw = document.querySelector('.sidebar-wrapper');
+  if (sw && OverlayScrollbarsGlobal?.OverlayScrollbars) {
+    OverlayScrollbarsGlobal.OverlayScrollbars(sw, { scrollbars: { theme: 'os-theme-light', autoHide: 'leave', clickScroll: true } });
+  }
+});
+
+const API = 'http://localhost:8080/api/students';
+let dt;
+
+function fmtDate(d) { return d ? new Date(d).toLocaleDateString('vi-VN') : '—'; }
+function fmtStatus(s) {
+  const map = { 'Đang học': 'success', 'Bảo lưu': 'warning', 'Tốt nghiệp': 'primary', 'Thôi học': 'danger' };
+  return s ? `<span class="badge text-bg-${map[s]||'secondary'}">${s}</span>` : '—';
+}
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  const m = document.getElementById('toastMsg');
+  t.className = `toast align-items-center text-white border-0 bg-${type}`;
+  m.textContent = msg;
+  new bootstrap.Toast(t, { delay: 3000 }).show();
+}
+
+$(document).ready(function() {
+  dt = $('#studentTable').DataTable({
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/vi.json' },
+    processing: true,
+    columns: [
+      { data: null, render: (d, t, r, meta) => meta.row + 1, orderable: false },
+      { data: 'code', defaultContent: '—' },
+      { data: 'fullname', defaultContent: '—' },
+      { data: 'gender', defaultContent: '—' },
+      { data: 'date_of_birth', render: d => fmtDate(d) },
+      { data: 'address', defaultContent: '—' },
+      { data: 'status', render: s => fmtStatus(s) },
+      { data: null, orderable: false, className: 'text-center', render: (d, t, row) =>
+        `<button class="action-btn text-warning" title="Sửa" onclick='editStudent(${JSON.stringify(row)})'><i class="bi bi-pencil-fill"></i></button>
+         <button class="action-btn text-danger" title="Xóa" onclick="deleteStudent('${row.id}')"><i class="bi bi-trash-fill"></i></button>`
+      }
+    ]
+  });
+  loadStudents();
+});
+
+async function loadStudents() {
+  try {
+    const r = await fetch(API);
+    const data = await r.json();
+    dt.clear().rows.add(data).draw();
+  } catch(e) { showToast('Lỗi tải dữ liệu!', 'danger'); }
+}
+
+function openAddModal() {
+  document.getElementById('modalTitle').innerHTML = '<i class="bi bi-person-plus-fill me-2"></i>Thêm sinh viên';
+  document.getElementById('studentId').value = '';
+  ['code','fullname','address','current_address','personal_identification_number','date_of_birth'].forEach(f => { const el = document.getElementById(f); if(el) el.value = ''; });
+  document.getElementById('gender').value = '';
+  document.getElementById('status').value = 'Đang học';
+  new bootstrap.Modal(document.getElementById('studentModal')).show();
+}
+
+function editStudent(s) {
+  document.getElementById('modalTitle').innerHTML = '<i class="bi bi-pencil-fill me-2"></i>Sửa sinh viên';
+  document.getElementById('studentId').value = s.id;
+  document.getElementById('code').value = s.code || '';
+  document.getElementById('fullname').value = s.fullname || '';
+  document.getElementById('gender').value = s.gender || '';
+  document.getElementById('address').value = s.address || '';
+  document.getElementById('current_address').value = s.current_address || '';
+  document.getElementById('personal_identification_number').value = s.personal_identification_number || '';
+  document.getElementById('status').value = s.status || 'Đang học';
+  if (s.date_of_birth) {
+    document.getElementById('date_of_birth').value = new Date(s.date_of_birth).toISOString().split('T')[0];
+  }
+  new bootstrap.Modal(document.getElementById('studentModal')).show();
+}
+
+async function saveStudent() {
+  const id = document.getElementById('studentId').value;
+  const dobVal = document.getElementById('date_of_birth').value;
+  const payload = {
+    code: document.getElementById('code').value,
+    fullname: document.getElementById('fullname').value,
+    gender: document.getElementById('gender').value,
+    address: document.getElementById('address').value,
+    current_address: document.getElementById('current_address').value,
+    personal_identification_number: document.getElementById('personal_identification_number').value,
+    status: document.getElementById('status').value,
+    date_of_birth: dobVal ? dobVal + 'T00:00:00' : null,
+  };
+  if (!payload.code || !payload.fullname) { showToast('Mã SV và Họ tên là bắt buộc!', 'warning'); return; }
+  try {
+    const opts = { method: id ? 'PUT' : 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) };
+    await fetch(id ? `${API}/${id}` : API, opts);
+    bootstrap.Modal.getInstance(document.getElementById('studentModal')).hide();
+    showToast(id ? 'Cập nhật thành công!' : 'Thêm thành công!');
+    loadStudents();
+  } catch(e) { showToast('Lỗi lưu dữ liệu!', 'danger'); }
+}
+
+async function deleteStudent(id) {
+  if (!confirm('Bạn có chắc muốn xóa sinh viên này?')) return;
+  try {
+    await fetch(`${API}/${id}`, { method: 'DELETE' });
+    showToast('Xóa thành công!');
+    loadStudents();
+  } catch(e) { showToast('Lỗi xóa!', 'danger'); }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>Quản lý Đào tạo | Đăng nhập</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Trang đăng nhập hệ thống quản lý đào tạo" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #6366f1;
+      --primary-dark: #3730a3;
+      --accent: #06b6d4;
+      --accent-light: #22d3ee;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --bg: #0f0f23;
+      --surface: rgba(255,255,255,0.05);
+      --surface-hover: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.1);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --radius: 16px;
+      --shadow-lg: 0 25px 50px rgba(0,0,0,0.5);
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    /* ===== Animated Background ===== */
+    .bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(79,70,229,0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(6,182,212,0.2) 0%, transparent 50%),
+                  radial-gradient(ellipse at 60% 90%, rgba(16,185,129,0.15) 0%, transparent 50%),
+                  linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f1f30 100%);
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: floatOrb 15s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, #4f46e5, transparent); top: -150px; left: -100px; animation-delay: 0s; }
+    .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, #06b6d4, transparent); bottom: -100px; right: -100px; animation-delay: -5s; }
+    .orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, #10b981, transparent); top: 50%; left: 50%; animation-delay: -10s; }
+
+    @keyframes floatOrb {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -40px) scale(1.05); }
+      66% { transform: translate(-20px, 30px) scale(0.95); }
+    }
+
+    /* Grid pattern */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* ===== Main Layout ===== */
+    .login-wrapper {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-container {
+      display: flex;
+      width: 100%;
+      max-width: 960px;
+      min-height: 580px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg), 0 0 0 1px var(--border);
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ===== Left Panel (Brand) ===== */
+    .brand-panel {
+      flex: 1;
+      background: linear-gradient(145deg, rgba(79,70,229,0.8) 0%, rgba(6,182,212,0.6) 100%);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(79,70,229,0.3), rgba(6,182,212,0.2));
+    }
+
+    .brand-panel-content { position: relative; z-index: 1; text-align: center; }
+
+    .brand-logo {
+      width: 90px; height: 90px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 24px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+      backdrop-filter: blur(10px);
+      animation: logoPulse 4s ease-in-out infinite;
+    }
+    .brand-logo i { font-size: 44px; color: #fff; }
+
+    @keyframes logoPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.3); }
+      50% { box-shadow: 0 0 0 16px rgba(255,255,255,0); }
+    }
+
+    .brand-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.7;
+      max-width: 260px;
+    }
+
+    .feature-list {
+      margin-top: 40px;
+      list-style: none;
+      text-align: left;
+      width: 100%;
+      max-width: 280px;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list i { font-size: 18px; color: var(--accent-light); flex-shrink: 0; }
+
+    /* ===== Right Panel (Form) ===== */
+    .form-panel {
+      flex: 1;
+      background: rgba(15, 15, 35, 0.85);
+      backdrop-filter: blur(30px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 56px 48px;
+    }
+
+    .form-header { margin-bottom: 36px; }
+    .form-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .form-header p { font-size: 14px; color: var(--text-muted); }
+
+    /* ===== Form Elements ===== */
+    .form-group { margin-bottom: 20px; }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      color: var(--text-muted);
+      font-size: 18px;
+      pointer-events: none;
+      transition: color 0.2s;
+      z-index: 1;
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 16px 14px 48px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .form-input::placeholder { color: rgba(148,163,184,0.5); }
+    .form-input:focus {
+      border-color: var(--primary-light);
+      background: var(--surface-hover);
+      box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+    }
+    .form-input:focus + .input-icon,
+    .input-wrapper:focus-within .input-icon { color: var(--primary-light); }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+      transition: color 0.2s;
+      z-index: 1;
+    }
+    .toggle-password:hover { color: var(--text); }
+
+    .form-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+    .remember-label input[type="checkbox"] {
+      width: 16px; height: 16px;
+      accent-color: var(--primary-light);
+      cursor: pointer;
+    }
+    .forgot-link {
+      font-size: 13px;
+      color: var(--accent-light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .forgot-link:hover { opacity: 0.75; }
+
+    /* ===== Alert ===== */
+    .alert-box {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      align-items: center;
+      gap: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+    .alert-box.show { display: flex; }
+    .alert-danger { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+    .alert-success { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
+    .alert-warning { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); color: #fde68a; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+    /* ===== Submit Button ===== */
+    .btn-login {
+      width: 100%;
+      padding: 15px 24px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.02em;
+    }
+    .btn-login::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--primary-light), var(--accent));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .btn-login:hover::before { opacity: 1; }
+    .btn-login:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(79,70,229,0.4); }
+    .btn-login:active { transform: translateY(0); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-login span { position: relative; z-index: 1; }
+
+    /* Loading spinner */
+    .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      position: relative; z-index: 1;
+    }
+    .btn-login.loading .spinner { display: inline-block; }
+    .btn-login.loading .btn-text { display: none; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== Footer ===== */
+    .form-footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 680px) {
+      .brand-panel { display: none; }
+      .login-container { max-width: 440px; }
+      .form-panel { padding: 40px 32px; }
+    }
+
+    /* ===== Ripple ===== */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      transform: scale(0);
+      animation: ripple-anim 0.6s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
+  </style>
+</head>
+<body>
+  <!-- Background -->
+  <div class="bg-scene"></div>
+  <div class="bg-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="login-wrapper">
+    <div class="login-container">
+
+      <!-- Left: Brand -->
+      <div class="brand-panel">
+        <div class="brand-panel-content">
+          <div class="brand-logo">
+            <i class="bi bi-mortarboard-fill"></i>
+          </div>
+          <h2 class="brand-title">Quản lý Đào tạo</h2>
+          <p class="brand-subtitle">Hệ thống quản lý toàn diện cho cơ sở giáo dục – từ sinh viên, học phần đến nhân sự.</p>
+          <ul class="feature-list">
+            <li><i class="bi bi-people-fill"></i> Quản lý sinh viên & nhân viên</li>
+            <li><i class="bi bi-journal-bookmark-fill"></i> Quản lý học phần, ngành học</li>
+            <li><i class="bi bi-bell-fill"></i> Thông báo & nhật ký hệ thống</li>
+            <li><i class="bi bi-shield-lock-fill"></i> Phân quyền chi tiết theo vai trò</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="form-panel">
+        <div class="form-header">
+          <h1>Chào mừng trở lại 👋</h1>
+          <p>Đăng nhập vào tài khoản để tiếp tục quản lý</p>
+        </div>
+
+        <!-- Alert -->
+        <div id="alertBox" class="alert-box" role="alert">
+          <i id="alertIcon" class="bi bi-exclamation-circle-fill"></i>
+          <span id="alertMsg"></span>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <!-- Username -->
+          <div class="form-group">
+            <label class="form-label" for="username">Tên đăng nhập</label>
+            <div class="input-wrapper">
+              <i class="bi bi-person-fill input-icon"></i>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                class="form-input"
+                placeholder="Nhập tên đăng nhập..."
+                autocomplete="username"
+                autofocus
+              />
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label class="form-label" for="password">Mật khẩu</label>
+            <div class="input-wrapper">
+              <i class="bi bi-lock-fill input-icon"></i>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-input"
+                placeholder="Nhập mật khẩu..."
+                autocomplete="current-password"
+              />
+              <button type="button" class="toggle-password" id="togglePwd" aria-label="Hiện/Ẩn mật khẩu">
+                <i class="bi bi-eye-fill" id="eyeIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Options -->
+          <div class="form-options">
+            <label class="remember-label">
+              <input type="checkbox" id="rememberMe" />
+              Ghi nhớ đăng nhập
+            </label>
+            <a href="#" class="forgot-link">Quên mật khẩu?</a>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn-login" id="btnLogin">
+            <span class="btn-text"><i class="bi bi-box-arrow-in-right me-2"></i>Đăng nhập</span>
+            <div class="spinner"></div>
+          </button>
+        </form>
+
+        <div class="form-footer">
+          <p>Hệ thống Quản lý Đào tạo &copy; 2025 &mdash; v1.0</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:8080/api/auth';
+
+    // ===== Toggle Password =====
+    document.getElementById('togglePwd').addEventListener('click', function () {
+      const pwd = document.getElementById('password');
+      const icon = document.getElementById('eyeIcon');
+      const isHidden = pwd.type === 'password';
+      pwd.type = isHidden ? 'text' : 'password';
+      icon.className = isHidden ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill';
+    });
+
+    // ===== Alert =====
+    function showAlert(msg, type = 'danger') {
+      const box = document.getElementById('alertBox');
+      const msgEl = document.getElementById('alertMsg');
+      const iconEl = document.getElementById('alertIcon');
+      box.className = `alert-box show alert-${type}`;
+      msgEl.textContent = msg;
+      const icons = { danger: 'bi-exclamation-circle-fill', success: 'bi-check-circle-fill', warning: 'bi-exclamation-triangle-fill' };
+      iconEl.className = `bi ${icons[type] || icons.danger}`;
+    }
+    function hideAlert() {
+      document.getElementById('alertBox').className = 'alert-box';
+    }
+
+    // ===== Ripple Effect =====
+    document.getElementById('btnLogin').addEventListener('click', function (e) {
+      const btn = this;
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px`;
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+
+    // ===== Remember Me =====
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('rememberedUsername');
+      if (saved) {
+        document.getElementById('username').value = saved;
+        document.getElementById('rememberMe').checked = true;
+      }
+    });
+
+    // ===== Login Form Submit =====
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      hideAlert();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const rememberMe = document.getElementById('rememberMe').checked;
+      const btn = document.getElementById('btnLogin');
+
+      // Client-side validation
+      if (!username) { showAlert('Vui lòng nhập tên đăng nhập', 'warning'); document.getElementById('username').focus(); return; }
+      if (!password) { showAlert('Vui lòng nhập mật khẩu', 'warning'); document.getElementById('password').focus(); return; }
+
+      // Loading state
+      btn.disabled = true;
+      btn.classList.add('loading');
+
+      try {
+        const res = await fetch(`${API_BASE}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          // Remember me
+          if (rememberMe) localStorage.setItem('rememberedUsername', username);
+          else localStorage.removeItem('rememberedUsername');
+
+          // Lưu thông tin cơ bản vào sessionStorage
+          sessionStorage.setItem('currentUser', JSON.stringify({
+            userId: data.userId,
+            username: data.username,
+            email: data.email,
+            avatarUrl: data.avatarUrl,
+            role: data.role
+          }));
+
+          showAlert('Đăng nhập thành công! Đang chuyển hướng...', 'success');
+
+          // Chuyển đến trang chính sau 800ms
+          setTimeout(() => { window.location.href = '/index.html'; }, 800);
+        } else {
+          showAlert(data.message || 'Đăng nhập thất bại, vui lòng thử lại', 'danger');
+          btn.disabled = false;
+          btn.classList.remove('loading');
+        }
+      } catch (err) {
+        console.error('Login error:', err);
+        showAlert('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.', 'danger');
+        btn.disabled = false;
+        btn.classList.remove('loading');
+      }
+    });
+
+    // ===== Auto-redirect if already logged in =====
+    (async function checkSession() {
+      const currentUser = sessionStorage.getItem('currentUser');
+      if (!currentUser) return;
+      try {
+        const res = await fetch(`${API_BASE}/me`, { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) window.location.href = '/index.html';
+        }
+      } catch (_) {}
+    })();
+  </script>
+</body>
+</html>

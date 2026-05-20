@@ -1,0 +1,54 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Gradle
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# IDE - VSCode
+.vscode/
+*.code-workspace
+
+# Spring Boot
+*.log
+*.log.*
+
+# Sensitive config (optional - nếu có file local thì thêm vào)
+# src/main/resources/application-local.properties
+# src/main/resources/application-local.yml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node (nếu có frontend)
+node_modules/
+npm-debug.log*
+
+# Jar/War
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
