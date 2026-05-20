@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.demo.roles.model.entity.Role;
 import com.example.demo.roles.repository.RoleRepository;
@@ -16,7 +17,8 @@ public class DataInitializer {
 
     @Bean
     CommandLineRunner init(UserRepository userRepo,
-                           RoleRepository roleRepo) {
+                           RoleRepository roleRepo,
+                           PasswordEncoder passwordEncoder) {
 
         return args -> {
 
@@ -27,6 +29,10 @@ public class DataInitializer {
 
                             Role role = new Role();
                             role.setName("ADMIN");
+                            role.setCode("ADMIN");
+                            role.setDescription("Administrator");
+                            role.setIsSystem(true);
+                            role.setCreatedAt(LocalDateTime.now());
 
                             return roleRepo.save(role);
                         });
@@ -34,7 +40,7 @@ public class DataInitializer {
                 User admin = new User();
 
                 admin.setUsername("admin");
-                admin.setPassword("123456");
+                admin.setPassword(passwordEncoder.encode("123456")); // Hash password with BCrypt
                 admin.setEmail("admin@gmail.com");
                 admin.setPhone("0123456789");
                 admin.setIsActive(true);
@@ -44,7 +50,9 @@ public class DataInitializer {
 
                 userRepo.save(admin);
 
-                System.out.println("=== ĐÃ TẠO ADMIN ===");
+                System.out.println("=== ✅ ADMIN USER CREATED ===");
+                System.out.println("Username: admin");
+                System.out.println("Password: 123456");
             }
         };
     }
